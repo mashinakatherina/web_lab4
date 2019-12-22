@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>Sing up</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+    <style>
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100vh;
+            font-family: "Exo", sans-serif;
+            color: #fff;
+            background: linear-gradient(-45deg, #eb2eee, #e73c7e, #935ad5, #b2d5cb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity .5s;
+        }
+
+        .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */
+        {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="container">
+    <form class="form-signin" method="post" action="/registration">
+        <h2 class="form-signin-heading" style="text-align: center">REGISTRATION</h2>
+            <div v-if="error != null" class="alert alert-danger">{{err_msg}}</div>
+        <p>
+            <label for="username" class="sr-only">Username</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required
+                   autofocus>
+        </p>
+        <p>
+            <label for="password" class="sr-only">Password</label>
+            <input v-model="pass" type="password" id="password" name="password" class="form-control"
+                   placeholder="Password" required>
+        </p>
+        <p>
+            <label for="confirm_password" class="sr-only">Password</label>
+            <input v-model="conf_pass" type="password" id="confirm_password" name="confirm_password"
+                   class="form-control" placeholder="Confirm Password" required>
+        </p>
+        <transition name="fade">
+            <div v-if="pass_err" class="alert alert-danger">{{pass_err_msg}}</div>
+        </transition>
+        <p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" disabled :disabled="pass_err">Sign up
+            </button>
+        </p>
+
+    </form>
+    <form class="form-signin">
+        <a href="login">
+            <button class="btn btn-outline-dark btn-block" type="button">Sign in</button>
+        </a>
+    </form>
+</div>
+</div>
+</body>
+<script type="application/javascript">
+    let urlP = new URLSearchParams(window.location.search);
+    new Vue({
+        el: '#container',
+        data: {
+            error: urlP.get('error'),
+            pass_err: false,
+            err_msg: 'Registration failed. User exists',
+            pass_err_msg: 'Passwords do not match',
+            pass: '',
+            conf_pass: ''
+        },
+        beforeUpdate: function () {
+            this.pass_err = !(this.pass === this.conf_pass);
+        }
+    });
+</script>
+</html>
